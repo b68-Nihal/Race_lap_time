@@ -1,0 +1,37 @@
+{% extends 'racers/base.html' %}
+{% load static %} <!-- Assuming you have a base template --> 
+{% block content %}
+<script src="{% static 'js/qualifyingmode.js' %}"></script> <!-- Path to your JS file -->
+<div class="container">
+    <h2>Qualifying Mode</h2>
+    {% for category, groups in groups_by_category.items %}
+        <h3>{{ category }}</h3>
+        {% for group in groups %}
+            <h4>{{ group.name }}</h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Rider No</th>
+                        <th>Rider Name</th>
+                        <th>Lap 1</th>
+                        <th>Lap 2</th>
+                        <th>Lap 3</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for racer in group.racers.all %}
+                        <tr>
+                            <td>{{ racer.rider_number }}</td>
+                            <td>{{ racer.name }}</td>
+                            <td><input type="text" class="form-control lap-time" data-racer-id="{{ racer.id }}" data-lap-number="1"></td>
+                            <td><input type="text" class="form-control lap-time" data-racer-id="{{ racer.id }}" data-lap-number="2"></td>
+                            <td><input type="text" class="form-control lap-time" data-racer-id="{{ racer.id }}" data-lap-number="3"></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endfor %}
+    {% endfor %}
+    <button id="submitLapTimes" class="btn btn-primary">Submit Lap Times</button>
+</div>
+{% endblock %}

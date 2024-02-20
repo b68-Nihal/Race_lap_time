@@ -1,0 +1,35 @@
+{% extends 'racers/base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1>Sorted Lap Times</h1>
+    {% for category, groups in data_by_category.items %}
+        <h2>{{ category }}</h2>
+        {% for group_name, racers in groups.items %}
+            <h3>{{ group_name }}</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Rider No</th>
+                        <th>Rider Name</th>
+                        <th>Best Lap Time</th>
+                        <th>Second Best Lap Time</th>
+                        <th>Third Best Lap Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for racer, sorted_laps in racers %}
+                        <tr>
+                            <td>{{ racer.rider_number }}</td>
+                            <td>{{ racer.name }}</td>
+                            {% for lap in sorted_laps %}
+                                <td>{{ lap.lap_time }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endfor %}
+    {% endfor %}
+</div>
+{% endblock %}

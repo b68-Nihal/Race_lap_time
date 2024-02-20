@@ -1,0 +1,53 @@
+{% extends 'racers/base.html' %}
+
+{% block content %}
+<div class="container">
+    <form method="POST" action="{% url 'race_mode' %}">
+        {% csrf_token %}
+        {{ formset.management_form }}
+        
+        {% for category, groups in race_data.items %}
+            <h2>{{ category }}</h2>
+            {% for group_name, racers in groups.items %}
+                <h3>{{ group_name }}</h3>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Position</th>
+                            <th>Rider Name</th>
+                            <th>Rider No</th>
+                            <th>Best Lap Time</th>
+                            <th>Finish Position</th>
+                            <th>Penalty</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for racer_info in racers %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ racer_info.racer.name }}</td>
+                                <td>{{ racer_info.racer.rider_number }}</td>
+                                <td>{{ racer_info.sorted_laps.0.lap_time }}</td>
+                                <td>
+                                    <select name="form-{{ forloop.parentloop.counter0 }}-finish_position" class="form-control">
+                                        <option value="N/A">N/A</option>
+                                        <option value="P1">P1</option>
+                                        <option value="P2">P2</option>
+                                        <option value="P3">P3</option>
+                                        <option value="P4">P4</option>
+                                        <option value="P5">P5</option>
+                                        <option value="P6">P6</option>
+                                        <option value="DNF">DNF</option>
+                                    </select>
+                                </td>
+                                <td><input type="text" name="form-{{ forloop.parentloop.counter0 }}-penalty" class="form-control" /></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endfor %}
+        {% endfor %}
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+{% endblock %}
