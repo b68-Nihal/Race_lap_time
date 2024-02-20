@@ -159,10 +159,28 @@ def race_mode(request):
     if request.method == 'POST':
         FormSet = modelformset_factory(RaceModeData, form=RaceModeDataForm, extra=0)
         formset = FormSet(request.POST)
-        if formset.is_valid():
-            formset.save()
-            print("Formset is valid")
-            return redirect('race_mode')  # Redirect or update as neededS
+        group = Group.objects.all()
+        racers =  Racer.objects.all()
+        for group in group:
+            category = group.category
+            group_name = group.name
+            for racer in racers:
+                query_for_finish_position = 'form-'+category+'-'+group_name+'-'+str(racer.id)+'-finish_position'
+                query_for_penalty = 'form-'+category+'-'+group_name+'-'+str(racer.id)+'-penalty'
+                finish_position = request.POST.get(query_for_finish_position)
+                penalty = request.POST.get(query_for_penalty)
+
+                if finish_position :
+                    # print(f'Finish Position: {finish_position}')
+                    # print(f'Penalty: {penalty}')
+                    racer = Racer.objects.get(id=racer.id)
+                    group = Group.objects.get(name=group_name)
+                    RaceModeData.objects.create(
+                        racer=racer, 
+                        group=group, 
+                        finish_position=finish_position, 
+                        penalty=penalty)
+        return redirect('race_mode')  # Redirect or update as neededS
     else:
         FormSet = modelformset_factory(RaceModeData, form=RaceModeDataForm, extra=0)
         formset = FormSet(queryset=RaceModeData.objects.none())  # Adjust as needed
@@ -189,7 +207,6 @@ def race_mode(request):
                 parse_lap_time(x['sorted_laps'][1].lap_time if len(x['sorted_laps']) > 1 else "99:59.999"),
                 parse_lap_time(x['sorted_laps'][2].lap_time if len(x['sorted_laps']) > 2 else "99:59.999"),
             ))
-    
     
     return render(request, 'racers/race_mode.html', {'race_data': race_data, 'formset': formset})
     
