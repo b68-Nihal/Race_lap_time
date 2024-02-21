@@ -17,14 +17,14 @@ class Racer(models.Model):
         return f"{self.name} ({self.rider_number}) - {self.category}"
 
 class Group(models.Model):
-    name = models.CharField(max_length=10)
+    name = models.CharField(max_length=100)
     category = models.CharField(max_length=8, choices=Racer.CATEGORY_CHOICES)
     racers = models.ManyToManyField(Racer, related_name='groups')
 
     def __str__(self):
         return f"{self.name} - {self.category}"
-    # class meta:
-    #     unique_together = ('name', 'category','racers')
+    class meta:
+        unique_together = ('name', 'category')
 
 
 
@@ -70,3 +70,5 @@ class RaceModeData(models.Model):
 
     def __str__(self):
         return f"{self.group.name} - {self.racer.name} - {self.finish_position}"
+    class Meta:
+        unique_together = ('racer', 'finish_position','group')

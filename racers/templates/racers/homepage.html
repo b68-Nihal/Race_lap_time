@@ -19,6 +19,12 @@
             <div class="col-md-4">
                 <a href="{% url 'race_mode' %}" class="btn btn-success btn-lg" role="button">Race Mode</a>
             </div>
+            <div class="col-md-4">
+                <form action="{% url 'generate_new_groups' %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary">Generate New Groups</button>
+                </form>
+            </div>
         </div>
     </div>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

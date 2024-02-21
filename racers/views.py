@@ -29,15 +29,6 @@ from .models import Group, Racer, SortedLapTime, RaceModeData
 from django.forms import modelformset_factory
 from .forms import RaceModeDataForm
 # This mapping could be defined outside the view function, perhaps in a utilities module or directly in the views.py
-GROUP_ADVANCEMENT_MAPPING = {
-    'A': 'I', 'B': 'I',
-    'C': 'J', 'D': 'J',
-    'E': 'K', 'F': 'K',
-    'G': 'L', 'H': 'L',
-    'I': 'M', 'J': 'M',
-    'K': 'N', 'L': 'N',
-    'M': 'Finals', 'N': 'Finals',
-}
 
 
 def display_sorted_lap_times(request):
@@ -164,6 +155,7 @@ def race_mode(request):
         for group in group:
             category = group.category
             group_name = group.name
+            group_id = group.id
             for racer in racers:
                 query_for_finish_position = 'form-'+category+'-'+group_name+'-'+str(racer.id)+'-finish_position'
                 query_for_penalty = 'form-'+category+'-'+group_name+'-'+str(racer.id)+'-penalty'
@@ -174,7 +166,7 @@ def race_mode(request):
                     # print(f'Finish Position: {finish_position}')
                     # print(f'Penalty: {penalty}')
                     racer = Racer.objects.get(id=racer.id)
-                    group = Group.objects.get(name=group_name)
+                    group = Group.objects.get(id=group_id)
                     RaceModeData.objects.create(
                         racer=racer, 
                         group=group, 
@@ -210,3 +202,55 @@ def race_mode(request):
     
     return render(request, 'racers/race_mode.html', {'race_data': race_data, 'formset': formset})
     
+@transaction.atomic
+def generate_new_groups(request):
+    # Define mappings for novice category advancement
+    novice_mappings = {
+        'A': 'I', 'B': 'I',
+        'C': 'J', 'D': 'J',
+        'E': 'K', 'F': 'K',
+        'G': 'L', 'H': 'L',
+        'I': 'M', 'J': 'M',
+        'K': 'N', 'L': 'N',
+        'M': 'Novice_Finals', 'N': 'Novice_Finals',
+    }
+    
+    # Define mappings for national category advancement
+    national_mappings = {
+        'A': 'D', 'B': ['D', 'E'], 'C': 'E', 'D': 'National_Finals', 'E': 'National_Finals',
+    }
+
+    def create_or_update_group(group_name, category, racer):
+        group, created = Group.objects.get_or_create(name=group_name, category=category)
+        racer.groups.add(group)
+
+    def process_novice_category():
+        for data in RaceModeData.objects.filter(group__category='Novice').select_related('racer', 'group'):
+            if data.finish_position in ['P1', 'P2', 'P3']:
+                new_group_name = novice_mappings.get(data.group.name)
+                if new_group_name:
+                    create_or_update_group(new_group_name, 'Novice', data.racer)
+
+    def process_national_category():
+        for data in RaceModeData.objects.filter(group__category='National').select_related('racer', 'group'):
+            if data.group.name == 'B':
+                if data.finish_position in ['P1', 'P3']:
+                    create_or_update_group('D', 'National', data.racer)
+                elif data.finish_position in ['P2', 'P4']:
+                    create_or_update_group('E', 'National', data.racer)
+            elif data.group.name in ['D', 'E']:
+                if data.finish_position in ['P1', 'P2', 'P3']:
+                    create_or_update_group('National_Finals', 'National', data.racer)
+            else:
+                new_group_name = national_mappings.get(data.group.name)
+                if isinstance(new_group_name, list):
+                    # Assuming only 'B' maps to multiple groups, handled above
+                    pass
+                elif new_group_name and data.finish_position in ['P1', 'P2', 'P3', 'P4']:
+                    create_or_update_group(new_group_name, 'National', data.racer)
+
+    # Process both categories
+    process_novice_category()
+    process_national_category()
+
+    return redirect('homepage')

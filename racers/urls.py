@@ -9,7 +9,7 @@ urlpatterns = [
     path('race/', views.race_mode, name='race_mode'),
     path('save-lap-times/', views.save_lap_times, name='save_lap_times'),
     path('sorted-lap-times/', views.display_sorted_lap_times, name='sorted_lap_times'),
-    
+    path('generate-groups/', views.generate_new_groups, name='generate_new_groups'),
 
     
     
