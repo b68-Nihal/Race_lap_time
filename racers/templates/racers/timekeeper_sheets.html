@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MSNC Lap Time Recording Sheet</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* Reset and Page Setup */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @page {
+            size: A4;
+            margin: 1cm;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 9pt;
+            line-height: 1.3;
+            background: white;
+        }
+
+        /* Page Container */
+        .page {
+            position: relative;
+            background: white;
+            height: 277mm;  /* A4 height minus margins */
+            padding-bottom: 25mm;  /* Space for footer */
+            page-break-after: always;
+        }
+
+        /* Header Section */
+        .header {
+            text-align: center;
+            border-bottom: 2px solid black;
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+        }
+
+        .header h1 {
+            font-size: 14pt;
+            font-weight: bold;
+            margin: 0 0 3px 0;
+        }
+
+        .header p {
+            margin: 2px 0;
+            font-size: 8pt;
+        }
+
+        /* Timekeeper Info Section */
+        .timekeeper-info {
+            border: 1.5px solid black;
+            padding: 8px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .timekeeper-info strong {
+            font-size: 10pt;
+        }
+
+        /* Rider Section */
+        .rider-section {
+            border: 1.5px solid black;
+            padding: 8px;
+            margin-bottom: 10px;
+            height: 105mm;
+        }
+
+        .group-header {
+            font-size: 10pt;
+            font-weight: bold;
+            border-bottom: 1px solid black;
+            padding-bottom: 3px;
+            margin-bottom: 5px;
+        }
+
+        /* Form Elements */
+        .form-row {
+            display: flex;
+            margin: 5px 0;
+            align-items: center;
+        }
+
+        .form-label {
+            width: 80px;
+            font-weight: bold;
+            font-size: 9pt;
+        }
+
+        .form-field {
+            flex: 1;
+            border-bottom: 1px solid black;
+            height: 16px;
+            margin-right: 5px;
+        }
+
+        /* Lap Times Section */
+        .lap-times {
+            margin-top: 10px;
+        }
+
+        .lap-box {
+            border: 1.5px solid black;
+            height: 25px;
+            margin: 5px 0;
+            background: white;
+        }
+
+        /* Rider Number Badge */
+        .rider-number {
+            display: inline-block;
+            border: 1.5px solid black;
+            padding: 1px 4px;
+            font-weight: bold;
+        }
+
+        /* Footer Section */
+        .page-footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding-top: 3mm;
+        }
+
+        .footer-border {
+            border-top: 2px solid black;
+            margin-bottom: 5px;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+            font-size: 9pt;
+            padding: 3px 0;
+        }
+
+        /* Print Styles */
+        @media print {
+            .no-print { display: none; }
+            body { margin: 0; padding: 0; }
+            .page { margin: 0; }
+        }
+    </style>
+</head>
+<body>
+    {% for timekeeper in timekeeper_data %}
+        {% for pair in timekeeper.paired_assignments %}
+        <div class="page">
+            <!-- Header -->
+            <div class="header">
+                <h1>MOTOR SPORTS NEPAL CLUB (MSNC)</h1>
+                <p>Buddhanagar-10, Kathmandu, Nepal | Tel: 01-4780117</p>
+                <p><strong>LAP TIME RECORDING SHEET</strong></p>
+            </div>
+
+            <!-- Timekeeper Info -->
+            <div class="timekeeper-info">
+                <strong>TIMEKEEPER #{{ timekeeper.number }}</strong>
+                <div style="margin-top: 5px;">
+                    <strong>Name:</strong> ________________________________
+                </div>
+                <div style="margin-top: 5px;">
+                    <strong>Date:</strong> __________________ 
+                    <span style="margin-left: 20px;">
+                        <strong>Time:</strong> __________________
+                    </span>
+                </div>
+            </div>
+
+            <!-- Rider Sections -->
+            {% for assignment in pair %}
+            <div class="rider-section">
+                <div class="group-header">
+                    {{ assignment.group.category }} - GROUP {{ assignment.group.name }}
+                </div>
+
+                <div class="form-row">
+                    <div class="form-label">Rider Name:</div>
+                    <div class="form-field">{{ assignment.rider.name }}</div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-label">Rider No:</div>
+                    <div class="form-field">
+                        <span class="rider-number">#{{ assignment.rider.rider_number }}</span>
+                    </div>
+                </div>
+
+                <div class="lap-times">
+                    <strong>LAP TIMES:</strong>
+                    <div class="lap-box"></div>
+                    <div class="lap-box"></div>
+                    <div class="lap-box"></div>
+                </div>
+            </div>
+            {% endfor %}
+
+            <!-- Page Footer -->
+            <div class="page-footer">
+                <div class="footer-border"></div>
+                <div class="footer-content">
+                    <div>MSNC Race Day</div>
+                    <div>Timekeeper #{{ timekeeper.number }}</div>
+                    <div>Page {{ forloop.counter }} of {{ timekeeper.paired_assignments|length }}</div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    {% endfor %}
+
+    <!-- Print Button -->
+    <div class="no-print" style="text-align: center; margin: 20px;">
+        <button onclick="window.print()" 
+                style="padding: 10px 20px; font-size: 16px; cursor: pointer; 
+                       background: black; color: white; border: none;">
+            Print Sheets
+        </button>
+    </div>
+</body>
+</html>

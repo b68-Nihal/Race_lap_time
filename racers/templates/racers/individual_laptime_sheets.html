@@ -1,0 +1,226 @@
+<!-- templates/racers/individual_laptime_sheets.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lap Time Recording Sheets</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 0.5cm;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            font-size: 9pt;
+            line-height: 1.2;
+            background: white;
+        }
+
+        .page {
+            width: 100%;
+            height: 297mm;
+            padding: 0;
+            margin: 0;
+            page-break-after: always;
+            background: white;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3px;
+            padding: 5px 0;
+            border-bottom: 1.5px solid black;
+        }
+
+        .header h1 {
+            font-size: 12pt;
+            margin: 0 0 2px 0;
+            font-weight: bold;
+        }
+
+        .header p {
+            margin: 1px 0;
+            font-size: 8pt;
+        }
+
+        .rider-section {
+            border: 1px solid black;
+            margin-bottom: 0.2cm;
+            padding: 0.3cm;
+            height: 11.5cm;  /* Reduced height */
+        }
+
+        .section-title {
+            font-size: 9pt;
+            margin: 5px 0 3px 0;
+            font-weight: bold;
+            border-bottom: 1px solid black;
+            padding-bottom: 2px;
+        }
+
+        .info-line {
+            display: flex;
+            margin: 3px 0;
+            align-items: center;
+        }
+
+        .info-label {
+            width: 70px;  /* Reduced width */
+            font-weight: bold;
+            font-size: 8pt;
+        }
+
+        .info-value {
+            flex: 1;
+            border-bottom: 1px solid black;
+            height: 14px;  /* Reduced height */
+            margin-right: 5px;
+        }
+
+        .rider-details {
+            margin: 8px 0;
+            padding: 5px;
+            border: 1px solid black;
+            background: white;
+        }
+
+        .laptime-section {
+            margin: 8px 0;
+        }
+
+        .laptime-entry {
+            margin: 5px 0;
+        }
+
+        .laptime-box {
+            border: 1px solid black;
+            width: 100%;
+            height: 22px;  /* Reduced height */
+            margin: 2px 0;
+            background: white;
+        }
+
+        .signature-section {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 8px;
+            font-size: 8pt;
+        }
+
+        .signature-box {
+            width: 120px;
+            text-align: center;
+        }
+
+        .signature-line {
+            border-top: 1px solid black;
+            margin-top: 20px;
+            padding-top: 2px;
+        }
+
+        .rider-number {
+            display: inline-block;
+            padding: 1px 4px;
+            border: 1px solid black;
+            font-weight: bold;
+        }
+
+        .main-border {
+            border: 1px solid black;
+            padding: 4px;
+            margin-bottom: 3px;
+        }
+
+        @media print {
+            .no-print { display: none; }
+            body { margin: 0; padding: 0; }
+            .page { height: 100vh; }
+        }
+    </style>
+</head>
+<body>
+    {% for racer in racers|slice:":6" %}
+    {% if forloop.counter0|divisibleby:2 %}
+    <div class="page">
+        <div class="header">
+            <h1>MOTOR SPORTS NEPAL CLUB (MSNC)</h1>
+            <p>LAP TIME RECORDING SHEET</p>
+        </div>
+    {% endif %}
+        
+        <div class="rider-section">
+            <div class="main-border">
+                <div class="info-line">
+                    <div class="info-label">Date:</div>
+                    <div class="info-value"></div>
+                    <div class="info-label">Time:</div>
+                    <div class="info-value"></div>
+                </div>
+
+                <div class="info-line">
+                    <div class="info-label">Category:</div>
+                    <div class="info-value">{{ group.category }}</div>
+                    <div class="info-label">Group:</div>
+                    <div class="info-value">{{ group.name }}</div>
+                </div>
+            </div>
+
+            <div class="section-title">TIMEKEEPER DETAILS</div>
+            <div class="info-line">
+                <div class="info-label">Name:</div>
+                <div class="info-value"></div>
+            </div>
+
+            <div class="section-title">RIDER DETAILS</div>
+            <div class="rider-details">
+                <div class="info-line">
+                    <div class="info-label">Name:</div>
+                    <div class="info-value">{{ racer.name }}</div>
+                </div>
+                <div class="info-line">
+                    <div class="info-label">Number:</div>
+                    <div class="info-value">
+                        <span class="rider-number">#{{ racer.rider_number }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-title">LAP TIMES</div>
+            <div class="laptime-entry">
+                <strong>LAP 1</strong>
+                <div class="laptime-box"></div>
+            </div>
+            <div class="laptime-entry">
+                <strong>LAP 2</strong>
+                <div class="laptime-box"></div>
+            </div>
+            <div class="laptime-entry">
+                <strong>LAP 3</strong>
+                <div class="laptime-box"></div>
+            </div>
+
+            <div class="signature-section">
+                <div class="signature-box">
+                    <div class="signature-line">Timekeeper</div>
+                </div>
+                <div class="signature-box">
+                    <div class="signature-line">Chief Marshal</div>
+                </div>
+            </div>
+        </div>
+
+    {% if forloop.counter|divisibleby:2 or forloop.last %}
+    </div>
+    {% endif %}
+    {% endfor %}
+
+    <div class="no-print" style="text-align: center; margin: 20px;">
+        <button onclick="window.print()" style="padding: 10px 20px; font-size: 16px; cursor: pointer; 
+                background: black; color: white; border: none;">
+            Print Sheets
+        </button>
+    </div>
+</body>
+</html>

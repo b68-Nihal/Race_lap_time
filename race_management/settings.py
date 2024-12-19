@@ -84,11 +84,11 @@ WSGI_APPLICATION = 'race_management.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'laptimes',
-        'USER': 'doadmin',
-        'PASSWORD': 'AVNS_ayGHhFBurlgYxCc8vl4',
-        'HOST': 'db-postgresql-blr1-32056-do-user-14579341-0.c.db.ondigitalocean.com',
-        'PORT': '25060'
+        'NAME': 'NRRC2024RD4',
+        'USER': 'postgres',
+        'PASSWORD': 'af66bce222',
+        'HOST': '127.0.0.1',
+        'PORT': '5432'
     }
 }
 
@@ -130,6 +130,7 @@ USE_TZ = True
 # STATIC_URL = 'static/'
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
+#STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
