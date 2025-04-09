@@ -17,6 +17,10 @@ urlpatterns = [
     path('individual-laptime/', views.individual_laptime_sheets, name='individual_laptime_sheets'),
     path('individual-laptime/<int:group_id>/', views.individual_laptime_sheets, name='individual_laptime_sheets'),
     path('timekeeper-sheets/', views.timekeeper_sheets, name='timekeeper_sheets'),
+    path('qualifying-schedule/', views.qualifying_schedule_view, name='qualifying_schedule'),
+    # path('qualifying-schedule/', views.qualifying_schedule, name='qualifying_schedule'),
+    path("heat-assignments/", views.heat_assignment_list, name="heat_assignments"),
+
 
     
     

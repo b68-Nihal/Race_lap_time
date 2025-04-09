@@ -3,32 +3,27 @@
 {% block content %}
 <div class="min-h-screen bg-gray-100 py-8">
     <div class="container mx-auto px-4">
-        <!-- Header -->
+        <!-- Header remains same -->
         <div class="mb-8 text-center">
-            <h1 class="text-4xl font-bold text-gray-800 mb-2">Race Results</h1>
+            <h1 class="text-4xl font-bold text-gray-800 mb-2">Race Results & Points</h1>
             <div class="w-20 h-1 bg-blue-500 mx-auto"></div>
         </div>
 
-        <!-- Results Container -->
         {% for category, groups in results_by_category.items %}
             <div class="mb-12">
-                <!-- Category Header -->
                 <div class="bg-gradient-to-r from-blue-600 to-blue-800 rounded-t-lg p-4">
                     <h2 class="text-2xl font-bold text-white">{{ category }} Class</h2>
                 </div>
 
-                <!-- Groups Grid -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                     {% for group_name, results in groups.items %}
                         <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-                            <!-- Group Header -->
                             <div class="bg-gray-50 px-6 py-4 border-b border-gray-200">
                                 <h3 class="text-xl font-semibold text-gray-800">
                                     Group {{ group_name }}
                                 </h3>
                             </div>
 
-                            <!-- Results Table -->
                             <div class="overflow-x-auto">
                                 <table class="min-w-full">
                                     <thead>
@@ -41,6 +36,9 @@
                                             </th>
                                             <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                                 Name
+                                            </th>
+                                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                                Points
                                             </th>
                                             <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                                 Penalty
@@ -61,6 +59,25 @@
                                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                                                     {{ result.racer.name }}
                                                 </td>
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                                    {% if result.finish_position == 'P1' %}
+                                                        <span class="text-green-600">15</span>
+                                                    {% elif result.finish_position == 'P2' %}
+                                                        <span class="text-green-600">12</span>
+                                                    {% elif result.finish_position == 'P3' %}
+                                                        <span class="text-green-600">10</span>
+                                                    {% elif result.finish_position == 'P4' %}
+                                                        <span class="text-green-600">9</span>
+                                                    {% elif result.finish_position == 'P5' %}
+                                                        <span class="text-green-600">8</span>
+                                                    {% elif result.finish_position == 'P6' %}
+                                                        <span class="text-green-600">7</span>
+                                                    {% elif result.finish_position in 'P7,P8,P9,P10,P11,P12' %}
+                                                        <span class="text-green-600">3</span>
+                                                    {% else %}
+                                                        <span class="text-gray-400">-</span>
+                                                    {% endif %}
+                                                </td>
                                                 <td class="px-6 py-4 whitespace-nowrap text-sm">
                                                     {% if result.penalty %}
                                                         <span class="bg-red-100 text-red-800 px-2 py-1 rounded-full text-xs font-medium">
@@ -73,12 +90,12 @@
                                             </tr>
                                         {% empty %}
                                             <tr>
-                                                <td colspan="4" class="px-6 py-8 text-center text-gray-500">
+                                                <td colspan="5" class="px-6 py-8 text-center text-gray-500">
                                                     <div class="flex flex-col items-center">
                                                         <svg class="w-12 h-12 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                                                         </svg>
-                                                        <p class="text-gray-600">No results available for this group</p>
+                                                        <p class="text-gray-600">No results available</p>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -86,39 +103,24 @@
                                     </tbody>
                                 </table>
                             </div>
-
-                            <!-- Group Footer -->
-                            <div class="bg-gray-50 px-6 py-3 border-t border-gray-200">
-                                <p class="text-sm text-gray-600">
-                                    Total Riders: {{ results|length }}
-                                </p>
-                            </div>
                         </div>
                     {% endfor %}
                 </div>
             </div>
         {% endfor %}
 
-        <!-- Legend -->
+        <!-- Points Legend -->
         <div class="mt-8 bg-white rounded-lg shadow-lg p-6">
-            <h3 class="text-lg font-semibold text-gray-800 mb-4">Position Legend</h3>
-            <div class="flex flex-wrap gap-4">
-                <div class="flex items-center">
-                    <span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-sm font-medium mr-2">P1</span>
-                    <span class="text-sm text-gray-600">First Place</span>
-                </div>
-                <div class="flex items-center">
-                    <span class="bg-gray-100 text-gray-800 px-2 py-1 rounded-full text-sm font-medium mr-2">P2</span>
-                    <span class="text-sm text-gray-600">Second Place</span>
-                </div>
-                <div class="flex items-center">
-                    <span class="bg-orange-100 text-orange-800 px-2 py-1 rounded-full text-sm font-medium mr-2">P3</span>
-                    <span class="text-sm text-gray-600">Third Place</span>
-                </div>
-                <div class="flex items-center">
-                    <span class="bg-red-100 text-red-800 px-2 py-1 rounded-full text-sm font-medium mr-2">PEN</span>
-                    <span class="text-sm text-gray-600">Penalty</span>
-                </div>
+            <h3 class="text-lg font-semibold text-gray-800 mb-4">Points System</h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="text-sm text-gray-600">1st Place: <span class="font-bold text-green-600">15 points</span></div>
+                <div class="text-sm text-gray-600">2nd Place: <span class="font-bold text-green-600">12 points</span></div>
+                <div class="text-sm text-gray-600">3rd Place: <span class="font-bold text-green-600">10 points</span></div>
+                <div class="text-sm text-gray-600">4th Place: <span class="font-bold text-green-600">9 points</span></div>
+                <div class="text-sm text-gray-600">5th Place: <span class="font-bold text-green-600">8 points</span></div>
+                <div class="text-sm text-gray-600">6th Place: <span class="font-bold text-green-600">7 points</span></div>
+                <div class="text-sm text-gray-600">7th-12th Place: <span class="font-bold text-green-600">3 points</span></div>
+                <div class="text-sm text-gray-600">DNF/DQ: <span class="font-bold text-red-600">0 points</span></div>
             </div>
         </div>
     </div>

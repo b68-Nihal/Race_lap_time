@@ -84,7 +84,7 @@ WSGI_APPLICATION = 'race_management.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'NRRC2024RD4',
+        'NAME': 'NRRC2025RD1',
         'USER': 'postgres',
         'PASSWORD': 'af66bce222',
         'HOST': '127.0.0.1',

@@ -1,0 +1,46 @@
+Category,Group,Name,Rider No,Heat,Transponder
+National,A,Dipesh Jaiswal,5,1,1000067
+National,A,Mangesh Joshi,10,1,1000038
+National,A,Shreehari Poudel,27,1,1000026
+National,A,Ritesh Khatri,48,2,1000061
+National,A,Abhinav Raj Malla,78,2,1000075
+National,B,Sujan Thapa Magar,7,2,1000082
+National,B,Sanskar Bista,19,3,1000067
+National,B,Sakar Shrestha,39,3,1000038
+National,B,Raj Kumar Karki,46,3,1000026
+National,B,Santosh Shrestha,53,4,1000061
+National,C,Bibek Pandey,34,4,1000075
+National,C,Pabin Karki,35,4,1000082
+National,C,Ramu Hang Rai,87,5,1000067
+National,C,Dilip Danuwar,99,5,1000038
+National,C,Mohamad Farhan,163,5,1000026
+Novice,A,Suraj Ghimire,29,6,1000061
+Novice,A,Birat Bista,58,6,1000075
+Novice,A,Hritik Pyakurel,74,6,1000082
+Novice,A,Prashant Sutihar,79,7,1000067
+Novice,A,Abhi Risal,82,7,1000038
+Novice,A,Krisal Thapa,100,7,1000026
+Novice,B,Shani Bohora,31,8,1000061
+Novice,B,Saman Bista,37,8,1000075
+Novice,B,Arun Kumar Bista,40,8,1000082
+Novice,B,Kaustubh Basnet,51,9,1000067
+Novice,B,Anish Thapa Magar,86,9,1000038
+Novice,B,Suhan Bista,95,9,1000026
+Novice,C,Sonam Tamang,17,10,1000061
+Novice,C,Sejal Deula,22,10,1000075
+Novice,C,Ranjeet Karki,23,10,1000082
+Novice,C,Saroj Dyal,49,11,1000067
+Novice,C,Sayal Gajmer,63,11,1000038
+Novice,D,Saimon Chaulagain,12,11,1000026
+Novice,D,Surakchya KC,62,12,1000061
+Novice,D,Ritesh Poudel,69,12,1000075
+Novice,D,Aayush Duwal,71,12,1000082
+Novice,D,Nikita Gajurel,72,13,1000067
+Novice,D,Sewak Khadka,94,13,1000038
+RaceNari,A,Sneha Gopali,31,14,1000026
+RaceNari,A,Barsha Basnet,33,14,1000061
+RaceNari,A,Mingma Lama Tamang,53,14,1000075
+RaceNari,A,Surakchya KC,62,15,1000082
+RaceNari,A,Nikita Gajurel,72,15,1000067
+RaceNari,A,Ayusha KC,73,15,1000038
+RaceNari,A,Nawang Tamang,333,16,1000026

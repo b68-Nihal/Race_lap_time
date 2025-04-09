@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Qualifying Schedule</title>
+    <style>
+        body { font-family: Arial; }
+        h2 { margin-top: 40px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+        @media print {
+            .no-print { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <h1>Qualifying Schedule</h1>
+    <button onclick="window.print()" class="no-print">🖨️ Print</button>
+    {% for category, heats in schedule.items %}
+        <h2>Category: {{ category }}</h2>
+        {% for item in heats %}
+            <h3>Group {{ item.group }} – Heat {{ item.heat }}</h3>
+            <table>
+                <tr><th>Rider Name</th><th>Rider No</th><th>Transponder ID</th></tr>
+                {% for racer in item.racers %}
+                    <tr>
+                        <td>{{ racer.name }}</td>
+                        <td>{{ racer.racer_number }}</td>
+                        <td>{{ racer.transponder_id }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endfor %}
+    {% endfor %}
+</body>
+</html>

@@ -751,3 +751,58 @@ def ceil(value):
         return math.ceil(value)
     except (ValueError, TypeError):
         return None
+
+from django.shortcuts import render
+from .models import Heat, HeatAssignment
+
+def qualifying_schedule_view(request):
+    heats = Heat.objects.prefetch_related('heatassignment_set__racer', 'heatassignment_set__transponder')
+    return render(request, 'racers/qualifying_schedule.html', {'heats': heats})
+
+from django.shortcuts import render
+from .models import Racer
+
+TRANSPONDERS = [
+    1000067, 1000038, 1000026,
+    1000061, 1000075, 1000082
+]
+
+def qualifying_schedule(request):
+    schedule = {}
+    categories = Racer.objects.values_list('category', flat=True).distinct()
+
+    for category in categories:
+        schedule[category] = []
+        groups = Racer.objects.filter(category=category).values_list('group__name', flat=True).distinct()
+
+        for group in groups:
+            racers = list(Racer.objects.filter(category=category, group_name=group).order_by('id'))
+            heats = [racers[i:i + 3] for i in range(0, len(racers), 3)]
+
+            for idx, heat in enumerate(heats):
+                for j, racer in enumerate(heat):
+                    racer.transponder_id = TRANSPONDERS[j]  # assign transponder
+                schedule[category].append({
+                    'group': group,
+                    'heat': idx + 1,
+                    'racers': heat
+                })
+
+    return render(request, 'racers/qualifying_schedule.html', {'schedule': schedule})
+
+# views.py (add this)
+from django.shortcuts import render
+from racers.models import HeatAssignment
+
+def heat_assignment_list(request):
+    assignments = HeatAssignment.objects.select_related('heat', 'racer', 'transponder')
+    grouped_assignments = {}
+
+    for a in assignments.order_by('heat__category', 'heat__heat_number'):
+        key = f"{a.heat.category} - Heat {a.heat.heat_number}"
+        grouped_assignments.setdefault(key, []).append(a)
+
+    return render(request, 'racers/heat_assignments.html', {
+        'grouped_assignments': grouped_assignments
+    })
+

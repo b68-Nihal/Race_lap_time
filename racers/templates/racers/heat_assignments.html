@@ -1,0 +1,42 @@
+<!-- templates/race/heat_assignments.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Heat Assignments</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .heat { margin-bottom: 40px; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+        th { background-color: #f4f4f4; }
+        h2 { margin-top: 40px; }
+        .print-button { margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <div class="print-button">
+        <button onclick="window.print()">🖨️ Print This Page</button>
+    </div>
+    {% for heat_label, racers in grouped_assignments.items %}
+        <div class="heat">
+            <h2>{{ heat_label }}</h2>
+            <table>
+                <tr>
+                    <th>Rider Name</th>
+                    <th>Rider No</th>
+                    <th>Heat No</th>
+                    <th>Transponder ID</th>
+                </tr>
+                {% for assignment in racers %}
+                <tr>
+                    <td>{{ assignment.racer.name }}</td>
+                    <td>{{ assignment.racer.rider_number }}</td>
+                    <td>{{ assignment.heat.heat_number }}</td>
+                    <td>{{ assignment.transponder.transponder_id }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    {% endfor %}
+</body>
+</html>
